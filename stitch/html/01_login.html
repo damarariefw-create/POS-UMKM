@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>SayurKu POS - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#64dd91",
+                    "on-tertiary-fixed": "#40000f",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "surface": "#FFFFFF",
+                    "on-primary-fixed": "#00210e",
+                    "on-tertiary": "#ffffff",
+                    "offline-badge": "#9CA3AF",
+                    "surface-dim": "#d5dcd3",
+                    "on-surface": "#171d18",
+                    "text-secondary": "#6B7280",
+                    "tertiary": "#a23546",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#005137",
+                    "kasbon": "#F59E0B",
+                    "tertiary-fixed-dim": "#ffb2b8",
+                    "inverse-surface": "#2b322c",
+                    "secondary": "#006c4a",
+                    "error": "#EF4444",
+                    "outline": "#6d7a6f",
+                    "surface-container-low": "#eff6ec",
+                    "primary": "#006a39",
+                    "inverse-primary": "#64dd91",
+                    "tertiary-fixed": "#ffdadb",
+                    "primary-container": "#008649",
+                    "on-surface-variant": "#3e4a3f",
+                    "on-primary-container": "#f6fff4",
+                    "secondary-fixed-dim": "#68dba9",
+                    "surface-container": "#e9f0e7",
+                    "tertiary-container": "#c24d5e",
+                    "background": "#F3F4F6",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#dee4db",
+                    "surface-container-high": "#e3eae1",
+                    "on-primary-fixed-variant": "#00522b",
+                    "surface-variant": "#dee4db",
+                    "inverse-on-surface": "#ecf3e9",
+                    "secondary-fixed": "#85f8c4",
+                    "on-secondary-fixed": "#002114",
+                    "surface-tint": "#006d3a",
+                    "primary-fixed": "#82faab",
+                    "on-tertiary-fixed-variant": "#851f33",
+                    "border": "#E5E7EB",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f5fbf2",
+                    "outline-variant": "#bdcabc",
+                    "text-primary": "#1F2937",
+                    "on-secondary-container": "#00714e",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "on-background": "#171d18"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "24px",
+                    "bottom-bar-height": "100px",
+                    "bottom-bar": "100px",
+                    "xs": "4px",
+                    "lg": "16px",
+                    "sm": "8px",
+                    "md": "12px"
+            },
+            "fontFamily": {
+                    "h1": ["Inter, sans-serif"],
+                    "body-md": ["Inter, sans-serif"],
+                    "h2": ["Inter, sans-serif"],
+                    "price": ["Inter, sans-serif"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "price-display": ["Inter"]
+            },
+            "fontSize": {
+                    "h1": ["1.25rem", {"fontWeight": "700"}],
+                    "h1-mobile": ["1.5rem", {"fontWeight": "800"}],
+                    "body-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "400"}],
+                    "h2": ["1rem", {"fontWeight": "600"}],
+                    "price": ["1rem", {"fontWeight": "700"}],
+                    "headline-md": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "600"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "600"}],
+                    "headline-lg": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "700"}],
+                    "price-display": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F3F4F6;
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior-y: contain;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .big-button-active:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-lg py-xl">
+<!-- Branding Section -->
+<div class="w-full max-w-sm mb-xl text-center">
+<div class="inline-flex items-center justify-center w-20 h-20 bg-primary-container rounded-xl mb-md shadow-sm">
+<span class="material-symbols-outlined text-on-primary-container !text-5xl">storefront</span>
+</div>
+<h1 class="font-h1 text-h1-mobile text-primary tracking-tight mb-xs">SayurKu POS</h1>
+<p class="font-body-md text-on-surface-variant">Solusi Jualan Sayur Lebih Praktis</p>
+</div>
+<!-- Login Card -->
+<div class="w-full max-w-sm bg-surface rounded-xl shadow-sm border border-border p-xl">
+<form class="space-y-lg" id="loginForm">
+<!-- Email/Phone Input -->
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant uppercase tracking-wider" for="identity">Email atau No. HP</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">person</span>
+<input class="w-full h-12 pl-11 pr-md bg-surface-container-lowest border-2 border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary focus:ring-0 transition-colors" id="identity" name="identity" placeholder="Masukkan email/HP" required="" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<label class="block font-label-sm text-on-surface-variant uppercase tracking-wider" for="password">Kata Sandi</label>
+<a class="font-label-sm text-primary hover:underline" href="#">Lupa Password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full h-12 pl-11 pr-xl bg-surface-container-lowest border-2 border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary focus:ring-0 transition-colors" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline active:text-primary" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined" id="passIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="pt-md">
+<button class="w-full h-14 bg-primary text-on-primary font-h2 rounded-xl shadow-md big-button-active transition-all flex items-center justify-center gap-sm" type="submit">
+<span>Masuk Sekarang</span>
+<span class="material-symbols-outlined">login</span>
+</button>
+</div>
+</form>
+<!-- Secondary Options -->
+<div class="mt-xl pt-lg border-t border-border text-center">
+<p class="font-body-md text-on-surface-variant mb-md">Belum punya akun?</p>
+<button class="w-full h-12 border-2 border-primary text-primary font-h2 rounded-xl big-button-active bg-surface hover:bg-surface-container-low transition-colors" type="button">
+                    Daftar Akun Baru
+                </button>
+</div>
+</div>
+<!-- Aesthetic Background Elements (Visual Only) -->
+<div class="fixed bottom-0 left-0 w-full opacity-10 -z-10 pointer-events-none">
+<div class="w-full h-64" data-alt="A vibrant, fresh marketplace background with high-quality close-ups of green vegetables and morning sunlight. The style is professional digital photography with soft-focus bokeh, reflecting a clean, corporate point of sale aesthetic. The lighting is bright and natural, using a color palette of deep greens and earthy tones to evoke reliability and freshness." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAp3cPzhreQBsRh6MU3gr4t_GOg3zLSvYAEYDO766R8t3IcXBKhpI5DyMC-WFYHxdisjT9kRPtu_v5eRog6ce4k_diP5RTrCjlxVHJJ2-Gqkb0gPJkUkwj10TQCHzchOnfKgxPtU6mgyaoLBufy1KMj2cghAo44NZn6fllAPIGeYUEmU7cTK5Eg16w6vomEi0iZm9pE4DNj_eut7pSIIDTnroX9qve_NnAmJjsc9bTABaZICDdUmxOR3OHHqwIQwRzs4lAFXpp-y0pD')"></div>
+</div>
+</main>
+<!-- Footer Identity -->
+<footer class="w-full py-lg text-center">
+<div class="inline-flex items-center gap-xs text-offline-badge font-label-sm uppercase tracking-widest">
+<span class="material-symbols-outlined !text-sm">verified_user</span>
+<span>Local First Syncing enabled</span>
+</div>
+</footer>
+<script>
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const passIcon = document.getElementById('passIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                passIcon.textContent = 'visibility_off';
+            } else {
+                passInput.type = 'password';
+                passIcon.textContent = 'visibility';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            
+            // Visual feedback for mobile interaction
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> <span>Menghubungkan...</span>`;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                alert('Sistem SayurKu POS siap digunakan! Silakan periksa kredensial Anda.');
+            }, 1500);
+        });
+    </script>
+</body></html>

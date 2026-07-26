@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Detail Pelanggan &amp; Kasbon - SayurKu POS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#F3F4F6",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#e9f0e7",
+                    "inverse-on-surface": "#ecf3e9",
+                    "secondary": "#006c4a",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e3eae1",
+                    "on-surface-variant": "#3e4a3f",
+                    "offline-badge": "#9CA3AF",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#64dd91",
+                    "on-secondary-fixed-variant": "#005137",
+                    "surface-variant": "#dee4db",
+                    "surface-bright": "#f5fbf2",
+                    "border": "#E5E7EB",
+                    "error": "#EF4444",
+                    "on-primary-fixed-variant": "#00522b",
+                    "on-error-container": "#93000a",
+                    "kasbon": "#F59E0B",
+                    "tertiary-fixed-dim": "#ffb2b8",
+                    "on-surface": "#171d18",
+                    "on-tertiary-fixed": "#40000f",
+                    "on-secondary-container": "#00714e",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "inverse-surface": "#2b322c",
+                    "surface-dim": "#d5dcd3",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary": "#ffffff",
+                    "text-primary": "#1F2937",
+                    "on-secondary-fixed": "#002114",
+                    "text-secondary": "#6B7280",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#dee4db",
+                    "outline": "#6d7a6f",
+                    "on-background": "#171d18",
+                    "tertiary-fixed": "#ffdadb",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-tint": "#006d3a",
+                    "primary": "#006a39",
+                    "on-tertiary-fixed-variant": "#851f33",
+                    "tertiary-container": "#c24d5e",
+                    "primary-fixed": "#82faab",
+                    "primary-container": "#008649",
+                    "on-primary-container": "#f6fff4",
+                    "outline-variant": "#bdcabc",
+                    "surface-container-low": "#eff6ec",
+                    "surface": "#FFFFFF",
+                    "primary-fixed-dim": "#64dd91",
+                    "on-primary-fixed": "#00210e",
+                    "tertiary": "#a23546",
+                    "secondary-fixed-dim": "#68dba9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "bottom-bar": "100px",
+                    "md": "12px",
+                    "bottom-bar-height": "100px",
+                    "xl": "24px",
+                    "sm": "8px",
+                    "lg": "16px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter, sans-serif"],
+                    "label-sm": ["Inter"],
+                    "price-display": ["Inter"],
+                    "h1": ["Inter, sans-serif"],
+                    "price": ["Inter, sans-serif"],
+                    "h2": ["Inter, sans-serif"]
+            },
+            "fontSize": {
+                    "headline-md": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "600"}],
+                    "headline-lg": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "700"}],
+                    "body-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "600"}],
+                    "price-display": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "700"}],
+                    "h1": ["1.25rem", {"fontWeight": "700"}],
+                    "price": ["1rem", {"fontWeight": "700"}],
+                    "h2": ["1rem", {"fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .big-button-active:active {
+            filter: brightness(0.9);
+            transform: scale(0.98);
+        }
+        .bottom-shadow {
+            box-shadow: 0 -4px 12px -2px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen max-w-md mx-auto bg-background relative overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center h-16 px-4 bg-surface border-b border-border shadow-sm">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Bu Budi - Blok A3</h1>
+<span class="font-label-sm text-label-sm text-text-secondary">Kompleks Hijau</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-variant">
+<span class="material-symbols-outlined text-on-surface">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-20 pb-32 px-4 space-y-6">
+<!-- Debt Summary Card (Bento Style) -->
+<section class="bg-surface rounded-xl p-6 border border-border shadow-sm flex flex-col items-center text-center">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider mb-1">TOTAL HUTANG (KASBON)</span>
+<div class="text-[2.5rem] font-extrabold text-kasbon leading-tight mb-4">
+                Rp 142.500
+            </div>
+<div class="w-full h-[1px] bg-border mb-4"></div>
+<div class="flex justify-between w-full">
+<div class="text-left">
+<p class="font-label-sm text-label-sm text-text-secondary">Terakhir Belanja</p>
+<p class="font-headline-md-mobile text-headline-md-mobile text-on-surface">24 Okt 2023</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-text-secondary">Status</p>
+<p class="font-headline-md-mobile text-headline-md-mobile text-error font-bold italic">Belum Lunas</p>
+</div>
+</div>
+</section>
+<!-- Quick Actions Grid -->
+<section class="grid grid-cols-2 gap-3">
+<button class="big-button-active flex flex-col items-center justify-center gap-2 bg-primary text-white p-4 rounded-xl shadow-sm transition-all">
+<span class="material-symbols-outlined text-[32px]">payments</span>
+<span class="font-label-sm text-label-sm">Bayar Hutang</span>
+</button>
+<button class="big-button-active flex flex-col items-center justify-center gap-2 bg-[#25D366] text-white p-4 rounded-xl shadow-sm transition-all">
+<span class="material-symbols-outlined text-[32px]">share</span>
+<span class="font-label-sm text-label-sm">Kirim Tagihan</span>
+</button>
+</section>
+<!-- History List -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md-mobile text-headline-md-mobile text-on-surface">Riwayat Kasbon</h2>
+<button class="text-primary font-label-sm text-label-sm">Lihat Semua</button>
+</div>
+<!-- List Items -->
+<div class="space-y-3">
+<!-- Transaction Item 1 -->
+<div class="bg-surface rounded-lg p-4 border border-border flex items-center gap-4 active:bg-surface-variant transition-colors">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-kasbon">
+<span class="material-symbols-outlined text-[28px]">receipt_long</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-headline-md-mobile text-headline-md-mobile text-on-surface">Paket Sayur Lodeh + Ayam</p>
+<p class="font-price-display text-price-display text-on-surface">Rp 45.000</p>
+</div>
+<div class="flex justify-between items-center mt-1">
+<span class="font-label-sm text-label-sm text-text-secondary">24 Okt • 07:15</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-[10px] font-bold">BAYAR NANTI</span>
+</div>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="bg-surface rounded-lg p-4 border border-border flex items-center gap-4 active:bg-surface-variant transition-colors">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-kasbon">
+<span class="material-symbols-outlined text-[28px]">receipt_long</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-headline-md-mobile text-headline-md-mobile text-on-surface">Beras 5kg &amp; Telur 1kg</p>
+<p class="font-price-display text-price-display text-on-surface">Rp 82.500</p>
+</div>
+<div class="flex justify-between items-center mt-1">
+<span class="font-label-sm text-label-sm text-text-secondary">20 Okt • 06:45</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-[10px] font-bold">BAYAR NANTI</span>
+</div>
+</div>
+</div>
+<!-- Transaction Item 3 (Paid example for contrast) -->
+<div class="bg-surface rounded-lg p-4 border border-border flex items-center gap-4 opacity-70">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">check_circle</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-headline-md-mobile text-headline-md-mobile text-on-surface">Cabe Keriting &amp; Tomat</p>
+<p class="font-price-display text-price-display text-on-surface">Rp 15.000</p>
+</div>
+<div class="flex justify-between items-center mt-1">
+<span class="font-label-sm text-label-sm text-text-secondary">15 Okt • 08:30</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[10px] font-bold">LUNAS</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Customer Location Section -->
+<section class="space-y-3">
+<h2 class="font-headline-md-mobile text-headline-md-mobile text-on-surface">Lokasi Pengantaran</h2>
+<div class="relative w-full h-32 rounded-xl overflow-hidden border border-border">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A clean, minimalist vector map of a residential housing complex with organized streets and green park areas. The map uses a soft pastel color palette of light greens, greys, and whites, matching a modern light-mode mobile UI aesthetic. Subtle markers indicate individual houses, and the overall feel is clear, functional, and community-oriented for a delivery app." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA5qV3ZJ6Snx5Gxx7-8QyFXpdoCTUrcXyGcMZ701lhTsrvCvJtbhsJkaCCcXKa2rac7umdrRAzvzbBVSqVQa4-pGMR94zQx6O26unizEQ8g_zQWyzLO3tCgy1l6vFQWguuUO0O2QOeuyfQP-g0dS44Q1vMW5oUTaw1ijVT_L1ZCqD7-g9TozcSYmDJArECJ48niM2wrrTo7XkpRe6T19gLJaQM7VcvEBvCv7UMVwvAs68mxEHM0LuiilnotftLBrfPeiWcv0Jee3WBJ')"></div>
+<div class="absolute inset-0 bg-black/5 flex items-center justify-center">
+<div class="bg-surface px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-label-sm text-label-sm">Blok A3, No. 12</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed left-0 w-full flex items-center h-[100px] gap-4 px-4 bg-surface border-t border-border bottom-shadow z-50 bottom-[100px]"><!-- Catat Kasbon -->
+<button class="flex-1 h-16 flex items-center justify-center border-2 border-kasbon rounded-xl bg-surface active:bg-surface-variant transition-all">
+<span class="font-bold text-kasbon text-center leading-tight uppercase tracking-wider">Catat<br>Kasbon</span>
+</button>
+<!-- Pay -->
+<button class="flex-[2] h-16 flex items-center justify-center gap-2 bg-primary text-white rounded-xl shadow-lg active:brightness-90 transition-all">
+<span class="material-symbols-outlined text-2xl">payments</span>
+<span class="font-bold uppercase tracking-wider">BAYAR SEKARANG</span>
+</button></div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('.big-button-active').forEach(button => {
+            button.addEventListener('touchstart', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('touchend', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Simulating the WhatsApp Send action
+        document.querySelector('button.bg-primary').addEventListener('click', () => {
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span><span class="font-label-sm">Mengirim...</span>';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined text-white">check_circle</span><span class="font-label-sm">Terkirim!</span>';
+                btn.classList.replace('bg-primary', 'bg-secondary');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.replace('bg-secondary', 'bg-primary');
+                }, 2000);
+            }, 1200);
+        });
+    </script>
+<nav class="fixed bottom-0 left-0 w-full bg-surface border-t border-border h-[100px] flex items-center justify-around px-4 z-[60]"><a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-label-sm">Beranda</span></a><a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#"><span class="material-symbols-outlined">receipt_long</span><span class="text-[10px] font-label-sm">Riwayat</span></a><a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#"><span class="material-symbols-outlined">group</span><span class="text-[10px] font-label-sm">Pelanggan</span></a><a class="flex flex-col items-center gap-1 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl" href="#"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-label-sm">Profil</span></a></nav>
+
+</body></html>

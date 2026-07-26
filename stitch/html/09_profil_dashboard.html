@@ -1,0 +1,463 @@
+<!DOCTYPE html><html class="light" lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#85f8c4",
+                    "tertiary": "#a23546",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#68dba9",
+                    "on-tertiary-container": "#fffbff",
+                    "on-surface": "#171d18",
+                    "outline": "#6d7a6f",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#64dd91",
+                    "surface-container": "#e9f0e7",
+                    "primary-container": "#008649",
+                    "primary-fixed": "#82faab",
+                    "surface-tint": "#006d3a",
+                    "on-surface-variant": "#3e4a3f",
+                    "on-primary-container": "#f6fff4",
+                    "surface-variant": "#dee4db",
+                    "error": "#EF4444",
+                    "background": "#F3F4F6",
+                    "surface-container-high": "#e3eae1",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#851f33",
+                    "kasbon": "#F59E0B",
+                    "on-background": "#171d18",
+                    "on-secondary-fixed": "#002114",
+                    "secondary-container": "#82f5c1",
+                    "primary-fixed-dim": "#64dd91",
+                    "surface": "#FFFFFF",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#00714e",
+                    "text-secondary": "#6B7280",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb2b8",
+                    "secondary": "#006c4a",
+                    "surface-bright": "#f5fbf2",
+                    "on-primary-fixed-variant": "#00522b",
+                    "inverse-on-surface": "#ecf3e9",
+                    "tertiary-container": "#c24d5e",
+                    "inverse-surface": "#2b322c",
+                    "tertiary-fixed": "#ffdadb",
+                    "on-primary-fixed": "#00210e",
+                    "surface-container-low": "#eff6ec",
+                    "on-secondary-fixed-variant": "#005137",
+                    "on-tertiary-fixed": "#40000f",
+                    "offline-badge": "#9CA3AF",
+                    "on-error-container": "#93000a",
+                    "primary": "#006a39",
+                    "outline-variant": "#bdcabc",
+                    "surface-dim": "#d5dcd3",
+                    "text-primary": "#1F2937",
+                    "border": "#E5E7EB",
+                    "surface-container-highest": "#dee4db"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "lg": "16px",
+                    "bottom-bar-height": "100px",
+                    "md": "12px",
+                    "bottom-bar": "100px",
+                    "sm": "8px",
+                    "xl": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "price-display": ["Inter"],
+                    "price": ["Inter, sans-serif"],
+                    "h2": ["Inter, sans-serif"],
+                    "headline-md": ["Inter"],
+                    "h1": ["Inter, sans-serif"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter, sans-serif"]
+            },
+            "fontSize": {
+                    "label-sm": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "600"}],
+                    "price-display": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "700"}],
+                    "price": ["1rem", {"fontWeight": "700"}],
+                    "h2": ["1rem", {"fontWeight": "600"}],
+                    "headline-md": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "600"}],
+                    "h1": ["1.25rem", {"fontWeight": "700"}],
+                    "headline-lg": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "700"}],
+                    "body-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F3F4F6;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .chart-bar {
+            transition: height 1s ease-in-out;
+        }
+        .safe-bottom {
+            padding-bottom: 120px;
+        }
+        .big-button-shadow {
+            box-shadow: 0 4px 0 0 rgba(0,0,0,0.1);
+        }
+        .big-button-shadow:active {
+            box-shadow: 0 0 0 0 rgba(0,0,0,0.1);
+            transform: translateY(2px);
+        }
+        .accordion-content {
+            max-height: 1000px;
+            transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+            overflow: hidden;
+        }
+        .accordion-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .rotate-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .rotate-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="max-w-md mx-auto bg-background min-h-screen relative shadow-2xl">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline shadow-sm flex items-center justify-between px-lg h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed active:scale-95 transition-transform" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md-mobile text-primary dark:text-primary-fixed">Profil &amp; Dashboard</h1>
+</div>
+<div class="flex items-center gap-sm">
+
+</div>
+</header>
+<main class="px-md pt-lg safe-bottom">
+<!-- Profile Section -->
+<section class="bg-surface rounded-xl p-lg flex items-center gap-lg mb-lg border border-outline-variant shadow-sm">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-2 border-primary overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A warm, professional portrait of a middle-aged Indonesian vendor named Pak Bambang, wearing a clean green polo shirt with a small SayurKu logo. The lighting is natural and bright, suggesting an outdoor morning market environment. The background is softly blurred showing fresh green vegetables. The aesthetic is modern, clean, and community-focused with high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFuN0_8xhUNssL6hCOKlQuZ_1TFarEh3lfUAb5OkITr79jIionQDgNTcmLb8x_s3jJAJelERhyfLHJRi2hIvl5SuBu0_oVG-o1XM-3m-njja0lrDFNSCeFD3ZooIj1ZM574CzL64Y-HmKnXpwdcywM4KUwcAnx-AL_BSYc3L6vyn7nMaimsXtK5EbuF70AWAuZfhQxb3LPRrQtD4_HiVkfhv5YWVIfM1CDI7NKg_CU_tqOEeQYS1Nn96jZ5voKM_roGAdB1QFGbrjT">
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white p-0.5 rounded-full border-2 border-surface">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified" style="font-variation-settings: &quot;FILL&quot; 1;">verified</span>
+</div>
+</div>
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">Warung Sayur Pak Bambang</h2>
+<div class="flex items-center gap-1 text-primary mt-1">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-sm font-label-sm">Sedang Berjualan</span>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="grid grid-cols-3 gap-md mb-xl">
+<button class="col-span-1 h-24 bg-primary text-on-primary rounded-xl flex flex-col items-center justify-center gap-1 big-button-shadow active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="add_box" style="font-variation-settings: &quot;FILL&quot; 1;">add_box</span>
+<span class="font-label-sm text-label-sm">Tambah Produk</span>
+</button>
+<button class="col-span-1 h-24 bg-secondary-container text-on-secondary-container rounded-xl flex flex-col items-center justify-center gap-1 big-button-shadow active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="price_check">price_check</span>
+<span class="font-label-sm text-label-sm">Update Harga</span>
+</button>
+<button class="col-span-1 h-24 bg-surface-container-high text-on-surface rounded-xl flex flex-col items-center justify-center gap-1 big-button-shadow active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="price_change">price_change</span>
+<span class="font-label-sm text-label-sm">Update Masal</span>
+</button>
+</section>
+<!-- Dashboard: Grafik Penjualan & Kasbon -->
+<section class="bg-surface rounded-xl p-lg border border-outline-variant shadow-sm mb-lg">
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-h2 text-h2 text-on-surface">Grafik Penjualan</h3>
+<span class="text-label-sm text-on-surface-variant">Minggu Ini</span>
+</div>
+<div class="flex items-end justify-between h-40 gap-3 px-2">
+<!-- Simple bar chart simulation -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end gap-1 h-full">
+<div class="flex-1 bg-primary rounded-t-sm chart-bar" style="height: 60%;"></div>
+<div class="flex-1 bg-kasbon rounded-t-sm chart-bar" style="height: 20%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Sen</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end gap-1 h-full">
+<div class="flex-1 bg-primary rounded-t-sm chart-bar" style="height: 85%;"></div>
+<div class="flex-1 bg-kasbon rounded-t-sm chart-bar" style="height: 30%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Sel</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end gap-1 h-full">
+<div class="flex-1 bg-primary rounded-t-sm chart-bar" style="height: 45%;"></div>
+<div class="flex-1 bg-kasbon rounded-t-sm chart-bar" style="height: 10%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Rab</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end gap-1 h-full">
+<div class="flex-1 bg-primary rounded-t-sm chart-bar" style="height: 75%;"></div>
+<div class="flex-1 bg-kasbon rounded-t-sm chart-bar" style="height: 40%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Kam</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end gap-1 h-full">
+<div class="flex-1 bg-primary rounded-t-sm chart-bar" style="height: 95%;"></div>
+<div class="flex-1 bg-kasbon rounded-t-sm chart-bar" style="height: 15%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Jum</span>
+</div>
+</div>
+<div class="mt-lg pt-lg border-t border-outline-variant flex justify-around">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant">Pendapatan</span>
+<span class="font-price text-price text-primary">Rp 4.2M</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-kasbon"></span>
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant">Piutang Kasbon</span>
+<span class="font-price text-price text-kasbon">Rp 850rb</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Methods -->
+<section class="bg-surface rounded-xl p-lg border border-outline-variant shadow-sm mb-lg">
+<h3 class="font-h2 text-h2 text-on-surface mb-md">Metode Pembayaran</h3>
+<div class="space-y-sm">
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="payments">payments</span>
+</div>
+<span class="font-label-sm text-on-surface">Tunai (Cash)</span>
+</div>
+<div class="text-right">
+<div class="font-price text-price">Rp 2.850.000</div>
+<div class="text-[10px] text-on-surface-variant">68% Transaksi</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="qr_code_2">qr_code_2</span>
+</div>
+<span class="font-label-sm text-on-surface">QRIS</span>
+</div>
+<div class="text-right">
+<div class="font-price text-price">Rp 1.120.000</div>
+<div class="text-[10px] text-on-surface-variant">25% Transaksi</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-kasbon" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="font-label-sm text-on-surface">Kasbon</span>
+</div>
+<div class="text-right">
+<div class="font-price text-price">Rp 230.000</div>
+<div class="text-[10px] text-on-surface-variant">7% Transaksi</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Transaction History -->
+<section class="bg-surface rounded-xl border border-outline-variant shadow-sm transition-all duration-300 p-md" id="transaction-history-section">
+<div class="flex items-center justify-between mb-md cursor-pointer select-none" id="transaction-header">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant rotate-icon collapsed" data-icon="expand_more" id="accordion-arrow">expand_more</span>
+<h3 class="font-h2 text-h2 text-on-surface">Riwayat Terakhir</h3>
+</div>
+<a class="text-label-sm text-primary hover:underline z-10" href="#" onclick="event.stopPropagation()">Lihat Semua</a>
+</div>
+<div class="divide-y divide-outline-variant accordion-content collapsed" id="transaction-list">
+<!-- Transaction Item 1 -->
+<div class="py-md flex items-center justify-between active:bg-surface-container-lowest transition-colors">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">IB</div>
+<div>
+<div class="font-label-sm text-on-surface">Ibu Budiman</div>
+<div class="text-[10px] text-on-surface-variant">Hari ini, 08:45 • Tunai</div>
+</div>
+</div>
+<div class="font-price text-price text-primary">Rp 45.000</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="py-md flex items-center justify-between">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">M</div>
+<div>
+<div class="font-label-sm text-on-surface">Mas Anton</div>
+<div class="text-[10px] text-on-surface-variant">Hari ini, 08:12 • QRIS</div>
+</div>
+</div>
+<div class="font-price text-price text-primary">Rp 112.500</div>
+</div>
+<!-- Transaction Item 3 (Kasbon) -->
+<div class="py-md flex items-center justify-between">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center font-bold text-kasbon">S</div>
+<div>
+<div class="font-label-sm text-on-surface">Siti Rahma</div>
+<div class="text-[10px] text-on-surface-variant">Hari ini, 07:55 • Kasbon</div>
+</div>
+</div>
+<div class="font-price text-price text-kasbon">Rp 28.000</div>
+</div>
+<!-- Transaction Item 4 -->
+<div class="py-md flex items-center justify-between">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">P</div>
+<div>
+<div class="font-label-sm text-on-surface">Pak RT</div>
+<div class="text-[10px] text-on-surface-variant">Hari ini, 07:30 • Tunai</div>
+</div>
+</div>
+<div class="font-price text-price text-primary">Rp 15.000</div>
+</div>
+<!-- Transaction Item 5 -->
+<div class="py-md flex items-center justify-between">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">W</div>
+<div>
+<div class="font-label-sm text-on-surface">Warung Mpok</div>
+<div class="text-[10px] text-on-surface-variant">Kemarin, 17:45 • Tunai</div>
+</div>
+</div>
+<div class="font-price text-price text-primary">Rp 210.000</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 h-bottom-bar bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex justify-around items-center px-md">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Riwayat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-label-sm">Pelanggan</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1 active:scale-90 transition-all duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: &quot;FILL&quot; 1;">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Chart animation
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const targetHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = targetHeight;
+                }, 300);
+            });
+
+            // Accordion Logic for "Riwayat Terakhir"
+            const header = document.getElementById('transaction-header');
+            const list = document.getElementById('transaction-list');
+            const arrow = document.getElementById('accordion-arrow');
+
+            header.addEventListener('click', () => {
+                list.classList.toggle('collapsed');
+                arrow.classList.toggle('collapsed');
+                
+                // Adjust margin for section if needed
+                const section = document.getElementById('transaction-history-section');
+                if (list.classList.contains('collapsed')) {
+                    section.classList.remove('p-lg');
+                    section.classList.add('p-md');
+                } else {
+                    section.classList.remove('p-md');
+                    section.classList.add('p-lg');
+                }
+            });
+        });
+    </script>
+
+
+<div id="nav-drawer" class="fixed inset-0 z-[60] hidden">
+  <div class="absolute inset-0 bg-black/50" id="drawer-overlay"></div>
+  <div class="absolute left-0 top-0 h-full w-64 bg-surface shadow-2xl flex flex-col">
+    <div class="p-lg border-b border-outline-variant flex items-center justify-between">
+      <span class="font-h2 text-primary">Menu Utama</span>
+      <button class="material-symbols-outlined" id="close-drawer">close</button>
+    </div>
+    <nav class="flex-1 p-md space-y-sm">
+      <a href="#" class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm">Beranda</span>
+      </a>
+      <a href="#" class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span class="font-label-sm">Riwayat</span>
+      </a>
+      <a href="#" class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container">
+        <span class="material-symbols-outlined">group</span>
+        <span class="font-label-sm">Pelanggan</span>
+      </a>
+      <div class="border-t border-outline-variant my-md"></div>
+      <button class="w-full flex items-center gap-md p-md rounded-lg text-tertiary hover:bg-error-container transition-colors">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-label-sm">Keluar Akun</span>
+      </button>
+    </nav>
+  </div>
+</div><script class="">
+  (function() {
+    const menuBtn = document.querySelector('header button[data-icon="menu"]');
+    const drawer = document.getElementById('nav-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    const closeBtn = document.getElementById('close-drawer');
+
+    const toggleDrawer = () => drawer.classList.toggle('hidden');
+
+    if (menuBtn) menuBtn.onclick = toggleDrawer;
+    if (overlay) overlay.onclick = toggleDrawer;
+    if (closeBtn) closeBtn.onclick = toggleDrawer;
+  })();
+</script>
+
+</body></html>

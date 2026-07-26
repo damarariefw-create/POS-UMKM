@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#F3F4F6",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#e9f0e7",
+                    "inverse-on-surface": "#ecf3e9",
+                    "secondary": "#006c4a",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e3eae1",
+                    "on-surface-variant": "#3e4a3f",
+                    "offline-badge": "#9CA3AF",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#64dd91",
+                    "on-secondary-fixed-variant": "#005137",
+                    "surface-variant": "#dee4db",
+                    "surface-bright": "#f5fbf2",
+                    "border": "#E5E7EB",
+                    "error": "#EF4444",
+                    "on-primary-fixed-variant": "#00522b",
+                    "on-error-container": "#93000a",
+                    "kasbon": "#F59E0B",
+                    "tertiary-fixed-dim": "#ffb2b8",
+                    "on-surface": "#171d18",
+                    "on-tertiary-fixed": "#40000f",
+                    "on-secondary-container": "#00714e",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "inverse-surface": "#2b322c",
+                    "surface-dim": "#d5dcd3",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary": "#ffffff",
+                    "text-primary": "#1F2937",
+                    "on-secondary-fixed": "#002114",
+                    "text-secondary": "#6B7280",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#dee4db",
+                    "outline": "#6d7a6f",
+                    "on-background": "#171d18",
+                    "tertiary-fixed": "#ffdadb",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-tint": "#006d3a",
+                    "primary": "#006a39",
+                    "on-tertiary-fixed-variant": "#851f33",
+                    "tertiary-container": "#c24d5e",
+                    "primary-fixed": "#82faab",
+                    "primary-container": "#008649",
+                    "on-primary-container": "#f6fff4",
+                    "outline-variant": "#bdcabc",
+                    "surface-container-low": "#eff6ec",
+                    "surface": "#FFFFFF",
+                    "primary-fixed-dim": "#64dd91",
+                    "on-primary-fixed": "#00210e",
+                    "tertiary": "#a23546",
+                    "secondary-fixed-dim": "#68dba9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "bottom-bar": "100px",
+                    "md": "12px",
+                    "bottom-bar-height": "100px",
+                    "xl": "24px",
+                    "sm": "8px",
+                    "lg": "16px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter, sans-serif"],
+                    "label-sm": ["Inter"],
+                    "price-display": ["Inter"],
+                    "h1": ["Inter, sans-serif"],
+                    "price": ["Inter, sans-serif"],
+                    "h2": ["Inter, sans-serif"]
+            },
+            "fontSize": {
+                    "headline-md-mobile": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "700"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "600"}],
+                    "body-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "400"}],
+                    "h1": ["1.25rem", {"fontWeight": "700"}],
+                    "price": ["1rem", {"fontWeight": "700"}],
+                    "h2": ["1rem", {"fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center h-16 px-4 bg-surface shadow-sm border-b border-border">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">SayurKu POS</h1>
+</div>
+
+</header>
+<main class="pt-20 px-4 space-y-6">
+<!-- Main Highlight Card: Laba Bersih -->
+<section class="bg-primary-container rounded-xl p-6 shadow-sm border border-outline-variant relative overflow-hidden">
+<div class="relative z-10">
+<h2 class="text-on-primary-container font-label-sm text-label-sm opacity-80 mb-1">Laba Bersih Hari Ini</h2>
+<p class="text-on-primary-container font-headline-lg-mobile text-[2.5rem] font-black leading-tight tracking-tight">Rp 850.500</p>
+<div class="mt-4 flex items-center gap-2 text-on-primary-container bg-white/20 w-fit px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-label-sm text-label-sm">12% dari kemarin</span>
+</div>
+</div>
+<!-- Decorative circle -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+</section>
+<!-- Summary Grid -->
+<section class="grid grid-cols-3 gap-3">
+<div class="bg-surface p-4 rounded-xl shadow-sm border border-border">
+<p class="text-text-secondary font-label-sm text-[10px] uppercase tracking-wider mb-2">Total Omzet</p>
+<p class="text-primary font-bold text-sm">Rp 2.4M</p>
+</div>
+<div class="bg-surface p-4 rounded-xl shadow-sm border border-border">
+<p class="text-text-secondary font-label-sm text-[10px] uppercase tracking-wider mb-2">Total Modal</p>
+<p class="text-text-primary font-bold text-sm">Rp 1.5M</p>
+</div>
+<div class="bg-surface p-4 rounded-xl shadow-sm border border-border">
+<p class="text-text-secondary font-label-sm text-[10px] uppercase tracking-wider mb-2">Barang Susut</p>
+<p class="text-error font-bold text-sm">Rp 48.5k</p>
+</div>
+</section>
+<!-- Laporan Barang Susut List -->
+<section class="bg-surface rounded-xl shadow-sm border border-border overflow-hidden">
+<div class="p-4 border-b border-border flex justify-between items-center">
+<h3 class="font-headline-md-mobile text-headline-md-mobile text-text-primary">Barang Susut</h3>
+<span class="material-symbols-outlined text-text-secondary">info</span>
+</div>
+<div class="divide-y divide-border">
+<!-- Susut Item -->
+<div class="p-4 flex justify-between items-center bg-surface-container-low/30">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="High-contrast close-up shot of fresh green spinach leaves with small water droplets, vibrant organic farm style, studio lighting on a neutral grey background to emphasize texture and color." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWK8BG2ZDT5-Bv6qrao1zAq82IxZoFeWKyQ7RVgW75fitJTxJH1ilJg47GZkuxiD8CdmzDXyCuv_3zsk0Uqr8bH8nFO3r7vv6USzJDqiXxhTAMUJBjOLV5kRdsnLh-GrV7iML8Tyz6qp5eijkMF9Nr3fA3NYpAHJ6v83Mh9PP1yIsr0HcL42-jRisjt0dlKbcBe9ldgNuDGAGAOvrHr63hnsuQ0hCR9wAS0TbrX931mdLjBu8AC_vOvYgqFQxPXy6ddg6JBH6F6mG9">
+</div>
+<div>
+<p class="font-bold text-text-primary text-body-md">Bayam Hijau</p>
+<p class="text-text-secondary text-xs">Kualitas Menurun (Layu)</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-error font-bold text-body-md">-2.5 Kg</p>
+<p class="text-text-secondary text-xs">Rp 25.000</p>
+</div>
+</div>
+<!-- Susut Item -->
+<div class="p-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up of ripe red tomatoes, some slightly bruised to show inventory loss, high resolution, soft cinematic lighting, professional food photography, minimalist clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCII7NqKNoidWpmxWjyOz3hUQsAOMUOzh3vAlfVNuvYKD6qGQ6Pu0nx_3t9flBpbp2jlJUsas8ffoM2XZd9T5mD9dylvB7BVpa_b6pewl8DacpGlYZKK2PR-q2MVIZU7wVTvRzqZSKub2I3LuWETorEIEJ9vPLILLFNo4M6F27ByJLJm3J09xQZxM4p8Qt0s1G0kvWRRoM_MJC_W5NDQuWFdkMKHtvPth71aNm7AIJ0VZG7rsx1A6-3gm1YCtYn0U6f4Gs5un7U9Kxw">
+</div>
+<div>
+<p class="font-bold text-text-primary text-body-md">Tomat Merah</p>
+<p class="text-text-secondary text-xs">Busuk/Rusak</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-error font-bold text-body-md">-1.2 Kg</p>
+<p class="text-text-secondary text-xs">Rp 18.500</p>
+</div>
+</div>
+<!-- Susut Item -->
+<div class="p-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up of small green Thai bird's eye chilies on a dark rustic wooden surface, sharp focus, natural daylight, vivid colors, market-fresh look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAiWu_neJXkPxAol-j2v8v1GxUrRvy77ftgu1ZhkAXOXst7uOYoyZmBNpdOcP8LeZpzJnhCY5GxYCJZ8GBSr7BjDlcwAT-XN-Jju5owMv0orzCT4KzYn74KvMnRYZC2eGLfYzjmTNgMNEwvibcK6oe0vGR7a7uLuraaJLBvc_0vLyvPGzDB6ngccdZEB17a8bRXg4zin3johU5R9u2mpWj4zegcegkwWOSkFPpc-sKmfbnGHvZEmfwCYxCvqj_49FXoiIpxmJQTRcL">
+</div>
+<div>
+<p class="font-bold text-text-primary text-body-md">Cabe Rawit</p>
+<p class="text-text-secondary text-xs">Penyusutan Berat</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-error font-bold text-body-md">-0.5 Kg</p>
+<p class="text-text-secondary text-xs">Rp 5.000</p>
+</div>
+</div>
+</div>
+<button class="w-full p-4 text-primary font-bold text-sm bg-surface-container-low active:bg-surface-variant transition-colors">
+                Lihat Detail Kerugian
+            </button>
+</section>
+<!-- Barang Terlaris Bar Chart -->
+<section class="bg-surface rounded-xl shadow-sm border border-border p-4">
+<h3 class="font-headline-md-mobile text-headline-md-mobile text-text-primary mb-6">Barang Terlaris</h3>
+<div class="space-y-4">
+<!-- Bar Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-body-md font-semibold text-text-primary">Kangkung Ikat</span>
+<span class="text-xs font-bold text-primary">85 Pcs</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Bar Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-body-md font-semibold text-text-primary">Cabe Merah</span>
+<span class="text-xs font-bold text-primary">62 Kg</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 62%;"></div>
+</div>
+</div>
+<!-- Bar Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-body-md font-semibold text-text-primary">Bawang Putih</span>
+<span class="text-xs font-bold text-primary">48 Kg</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 48%;"></div>
+</div>
+</div>
+<!-- Bar Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-body-md font-semibold text-text-primary">Sawi Putih</span>
+<span class="text-xs font-bold text-primary">35 Pcs</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 35%;"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex h-[100px] gap-0 px-0 z-50 border-t border-border bg-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"><div class="flex w-full items-center justify-around h-full px-2">
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-semibold">Beranda</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-semibold">Riwayat</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-semibold">Pelanggan</span>
+</div>
+<div class="flex flex-col items-center gap-1 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-semibold">Profil</span>
+</div>
+</div></nav>
+<!-- Navigation Drawer (Off-screen by default, functional for visual representation) -->
+<aside class="fixed top-0 left-0 h-full w-80 bg-surface-container-lowest shadow-xl z-[60] -translate-x-full transition-transform duration-300 ease-in-out" id="drawer">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-8">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">SayurKu Menu</h2>
+</div>
+<nav class="flex-1">
+<a class="text-on-surface-variant p-4 flex items-center gap-4 hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-headline-md-mobile text-headline-md-mobile">Inventory</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-4 hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-headline-md-mobile text-headline-md-mobile">History</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-4 hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-headline-md-mobile text-headline-md-mobile">Debt</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg m-2 p-4 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">assessment</span>
+<span class="font-headline-md-mobile text-headline-md-mobile">Reports</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Overlay for Drawer -->
+<div class="fixed inset-0 bg-black/50 z-[55] opacity-0 pointer-events-none transition-opacity duration-300" id="overlay"></div>
+<script>
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('overlay');
+        const menuBtn = document.querySelector('header span.material-symbols-outlined');
+
+        function toggleDrawer() {
+            const isOpen = drawer.classList.contains('translate-x-0');
+            if (isOpen) {
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.remove('-translate-x-full');
+                drawer.classList.add('translate-x-0');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleDrawer);
+        overlay.addEventListener('click', toggleDrawer);
+
+        // Simple animation trigger for chart
+        window.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.bg-primary');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+
+
+</body></html>
