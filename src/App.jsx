@@ -8,6 +8,7 @@ import { POSPage } from './pages/POSPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { CustomersPage } from './pages/CustomersPage';
 import { HistoryPage } from './pages/HistoryPage';
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   return (
@@ -29,6 +30,9 @@ export default function App() {
             {/* Default Catch-all */}
             <Route path="*" element={<Navigate to="/pos" replace />} />
           </Routes>
+
+          {/* Analytics ditempatkan di dalam tree */}
+          <Analytics />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
