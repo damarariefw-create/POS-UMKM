@@ -9,6 +9,7 @@ import { ProductsPage } from './pages/ProductsPage';
 import { CustomersPage } from './pages/CustomersPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 export default function App() {
   return (
