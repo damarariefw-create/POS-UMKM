@@ -3,16 +3,16 @@ import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { 
-  Search, 
-  Trash2, 
-  Plus, 
-  Minus, 
-  ShoppingBag, 
-  CheckCircle2, 
-  PauseCircle, 
-  XCircle, 
-  Package, 
+import {
+  Search,
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  CheckCircle2,
+  PauseCircle,
+  XCircle,
+  Package,
   AlertCircle,
   Receipt,
   UserCheck,
@@ -26,19 +26,19 @@ import {
 
 export const POSPage = () => {
   const { user } = useAuth();
-  const { 
-    cartItems, 
-    addToCart, 
-    removeFromCart, 
-    updateQuantity, 
-    clearCart, 
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
     holdOrder,
     heldOrders,
     restoreOrder,
-    subtotal, 
-    tax, 
-    total, 
-    totalItemsCount 
+    subtotal,
+    tax,
+    total,
+    totalItemsCount
   } = useCart();
 
   const [products, setProducts] = useState([]);
@@ -58,7 +58,7 @@ export const POSPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [cashGiven, setCashGiven] = useState('');
   const [paymentNotes, setPaymentNotes] = useState('');
-  
+
   // Customer selection & instant add
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [customerSearch, setCustomerSearch] = useState('');
@@ -190,9 +190,9 @@ export const POSPage = () => {
         // Fallback insert attempt into transactions table if schema alias exists
         const { data: transData, error: transError } = await supabase
           .from('transactions')
-          .insert([{ 
-            user_id: user.id, 
-            total_amount: total, 
+          .insert([{
+            user_id: user.id,
+            total_amount: total,
             customer_id: selectedCustomerId || null,
             payment_notes: paymentNotes.trim() || null
           }])
@@ -230,7 +230,7 @@ export const POSPage = () => {
             quantity: item.quantity,
             subtotal: item.subtotal,
           }))
-        ).catch(() => {});
+        ).catch(() => { });
       }
 
       // 3. Update Customer Debt if Kasbon or Deficit
@@ -302,7 +302,7 @@ export const POSPage = () => {
         .single();
 
       if (error) throw error;
-      
+
       const newCustomer = data;
       setCustomers((prev) => [...prev, newCustomer].sort((a, b) => a.name.localeCompare(b.name)));
       setSelectedCustomerId(newCustomer.id);
@@ -415,7 +415,7 @@ export const POSPage = () => {
 
       {/* Payment Options & Summary Area at Bottom */}
       <div className="p-4 border-t border-border-custom bg-surface space-y-3 shrink-0">
-        
+
         {/* Payment Method Selector */}
         <div className="space-y-1.5">
           <label className="block text-xs font-semibold uppercase text-text-secondary">
@@ -425,11 +425,10 @@ export const POSPage = () => {
             <button
               type="button"
               onClick={() => setPaymentMethod('cash')}
-              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${
-                paymentMethod === 'cash'
+              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${paymentMethod === 'cash'
                   ? 'bg-primary text-white border-primary shadow-sm'
                   : 'bg-background text-text-secondary border-border-custom hover:bg-border-custom/50'
-              }`}
+                }`}
             >
               <Banknote className="w-4 h-4" />
               <span>Tunai</span>
@@ -437,11 +436,10 @@ export const POSPage = () => {
             <button
               type="button"
               onClick={() => setPaymentMethod('qris')}
-              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${
-                paymentMethod === 'qris'
+              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${paymentMethod === 'qris'
                   ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
                   : 'bg-background text-text-secondary border-border-custom hover:bg-border-custom/50'
-              }`}
+                }`}
             >
               <QrCode className="w-4 h-4" />
               <span>QRIS</span>
@@ -449,11 +447,10 @@ export const POSPage = () => {
             <button
               type="button"
               onClick={() => setPaymentMethod('kasbon')}
-              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${
-                paymentMethod === 'kasbon'
+              className={`h-10 rounded-md text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 border transition-all ${paymentMethod === 'kasbon'
                   ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
                   : 'bg-background text-text-secondary border-border-custom hover:bg-border-custom/50'
-              }`}
+                }`}
             >
               <UserCheck className="w-4 h-4" />
               <span>Kasbon</span>
@@ -493,7 +490,7 @@ export const POSPage = () => {
                   {numericCash < total ? 'Kurang (Otomatis Kasbon):' : 'Kembalian:'}
                 </span>
                 <span className={`text-sm tabular-nums ${numericCash < total ? 'text-amber-600 font-extrabold' : 'text-emerald-700'}`}>
-                  {numericCash < total 
+                  {numericCash < total
                     ? `-Rp ${deficitAmount.toLocaleString('id-ID')}`
                     : formatCurrency(changeAmount)}
                 </span>
@@ -546,7 +543,7 @@ export const POSPage = () => {
                     onClick={() => {
                       const trimmed = qrisTempInput.trim();
                       setQrisString(trimmed);
-                      try { localStorage.setItem('pos_umkm_qris_string', trimmed); } catch (_) {}
+                      try { localStorage.setItem('pos_umkm_qris_string', trimmed); } catch (_) { }
                       setIsEditingQris(false);
                     }}
                     disabled={!qrisTempInput.trim()}
@@ -757,13 +754,12 @@ export const POSPage = () => {
             isProcessingPay ||
             (paymentMethod === 'kasbon' && !selectedCustomerId)
           }
-          className={`w-full h-12 font-bold text-sm rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed ${
-            paymentMethod === 'kasbon'
+          className={`w-full h-12 font-bold text-sm rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed ${paymentMethod === 'kasbon'
               ? 'bg-amber-600 hover:bg-amber-700 text-white'
               : paymentMethod === 'qris'
-              ? 'bg-violet-600 hover:bg-violet-700 text-white'
-              : 'bg-primary hover:bg-primary-hover text-white'
-          }`}
+                ? 'bg-violet-600 hover:bg-violet-700 text-white'
+                : 'bg-primary hover:bg-primary-hover text-white'
+            }`}
         >
           {isProcessingPay ? (
             <>
@@ -777,8 +773,8 @@ export const POSPage = () => {
                 {paymentMethod === 'kasbon'
                   ? `CATAT KASBON (${formatCurrency(total)})`
                   : paymentMethod === 'qris'
-                  ? `KONFIRMASI QRIS (${formatCurrency(total)})`
-                  : `BAYAR SEKARANG (${formatCurrency(total)})`}
+                    ? `KONFIRMASI QRIS (${formatCurrency(total)})`
+                    : `BAYAR SEKARANG (${formatCurrency(total)})`}
               </span>
             </>
           )}
@@ -789,10 +785,10 @@ export const POSPage = () => {
 
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col md:flex-row overflow-hidden bg-background relative">
-      
+
       {/* LEFT SIDE: CATALOG */}
       <div className="flex-1 flex flex-col h-full border-r border-border-custom overflow-hidden">
-        
+
         {/* Search & Category Header */}
         <div className="p-3 sm:p-4 bg-surface border-b border-border-custom space-y-2.5 shrink-0">
           <div className="relative">
@@ -801,7 +797,7 @@ export const POSPage = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari nama sayur / bumbu (cth: Bayam)..."
+              placeholder="Cari nama barang / produk (cth: Beras)..."
               className="w-full pl-9 pr-4 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
             />
           </div>
@@ -813,11 +809,10 @@ export const POSPage = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                    selectedCategory === cat
+                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory === cat
                       ? 'bg-primary text-white shadow-sm'
                       : 'bg-background hover:bg-border-custom/50 text-text-secondary border border-border-custom'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -988,18 +983,17 @@ export const POSPage = () => {
               <p className="text-xs text-text-secondary mt-0.5">
                 ID: #{successModal.id.slice(0, 8)} • {successModal.date}
               </p>
-              <div className={`mt-1 inline-block px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border ${
-                successModal.paymentMethod === 'kasbon'
+              <div className={`mt-1 inline-block px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border ${successModal.paymentMethod === 'kasbon'
                   ? 'bg-amber-100 border-amber-300 text-amber-800'
                   : successModal.paymentMethod === 'qris'
-                  ? 'bg-violet-100 border-violet-300 text-violet-800'
-                  : 'bg-background border-border-custom text-text-primary'
-              }`}>
+                    ? 'bg-violet-100 border-violet-300 text-violet-800'
+                    : 'bg-background border-border-custom text-text-primary'
+                }`}>
                 {successModal.paymentMethod === 'kasbon'
                   ? `KASBON (${successModal.customerName || 'Pelanggan'})`
                   : successModal.paymentMethod === 'qris'
-                  ? '✅ QRIS / Transfer'
-                  : 'TUNAI / CASH'}
+                    ? '✅ QRIS / Transfer'
+                    : 'TUNAI / CASH'}
               </div>
             </div>
 

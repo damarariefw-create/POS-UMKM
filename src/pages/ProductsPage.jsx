@@ -36,7 +36,7 @@ export const ProductsPage = () => {
     try {
       setLoading(true);
       setErrorMsg('');
-      
+
       const [prodRes, catRes] = await Promise.all([
         supabase
           .from('products')
@@ -54,13 +54,13 @@ export const ProductsPage = () => {
       if (catRes.error) {
         console.warn('Categories table might not exist yet:', catRes.error.message);
       }
-      
+
       const prods = prodRes.data || [];
       const cats = catRes.data || [];
-      
+
       setProducts(prods);
       setCategoriesList(cats);
-      
+
       if (cats.length > 0 && !category) {
         setCategory(cats[0].name);
       }
@@ -312,13 +312,13 @@ export const ProductsPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-      
+
       {/* Header & Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-custom pb-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-extrabold text-text-primary flex items-center gap-2">
             <Package className="w-6 h-6 text-primary" />
-            Kelola Inventaris & Harga Sayuran
+            Kelola Inventaris & Harga Barang
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
             Tambah produk baru dan perbarui harga harian massal.
@@ -329,33 +329,30 @@ export const ProductsPage = () => {
         <div className="flex items-center bg-surface p-1 rounded-lg border border-border-custom shadow-xs">
           <button
             onClick={() => setActiveTab('list')}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'list'
-                ? 'bg-primary text-white shadow-sm'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'list'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-text-secondary hover:text-text-primary'
+              }`}
           >
             <Package className="w-4 h-4" />
             <span>Tambah & Daftar Produk</span>
           </button>
           <button
             onClick={() => setActiveTab('mass_update')}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'mass_update'
-                ? 'bg-primary text-white shadow-sm'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'mass_update'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-text-secondary hover:text-text-primary'
+              }`}
           >
             <Edit3 className="w-4 h-4" />
             <span>Daily Mass Update</span>
           </button>
           <button
             onClick={() => setActiveTab('categories')}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'categories'
-                ? 'bg-primary text-white shadow-sm'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'categories'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-text-secondary hover:text-text-primary'
+              }`}
           >
             <Tag className="w-4 h-4" />
             <span>Kelola Kategori</span>
@@ -399,7 +396,7 @@ export const ProductsPage = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="cth: Sawi Hijau / Bayam"
+                  placeholder="cth: Beras"
                   className="w-full px-3 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
                 />
               </div>
@@ -451,7 +448,7 @@ export const ProductsPage = () => {
                 <label className="block text-xs font-semibold uppercase text-text-secondary mb-1">
                   Upload Foto Produk (File Gambar)
                 </label>
-                
+
                 {imageDataUrl ? (
                   <div className="flex items-center gap-2 p-1.5 bg-background border border-border-custom rounded-md">
                     <img src={imageDataUrl} alt="Preview" className="w-8 h-8 object-cover rounded" />
@@ -664,7 +661,7 @@ export const ProductsPage = () => {
                 type="text"
                 value={newCatName}
                 onChange={(e) => setNewCatName(e.target.value)}
-                placeholder="cth: Sayur Daun / Umbi-umbian"
+                placeholder="cth: Bahan Pokok"
                 className="flex-1 px-3 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
               />
               <button

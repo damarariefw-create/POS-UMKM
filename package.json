@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@midscene/web": "^1.10.8",
     "@supabase/supabase-js": "^2.49.1",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "lucide-react": "^0.475.0",
+    "puppeteer": "^25.4.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -21,6 +24,7 @@
     "tailwind-merge": "^3.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
@@ -28,5 +32,18 @@
     "postcss": "^8.5.2",
     "tailwindcss": "^3.4.17",
     "vite": "^6.1.0"
-  }
+  },
+  "description": "Website Point of Sale (POS) sederhana untuk UMKM.  Repository ini berisi source code dan konfigurasi dasar  untuk membantu pengelolaan transaksi, inventaris, dan laporan penjualan. Teman-teman dapat menggunakan source code ini untuk membuat web POS sesuai kemauan kalian sendiri.",
+  "main": "e2e_test.spec.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damarariefw-create/POS-UMKM.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/damarariefw-create/POS-UMKM/issues"
+  },
+  "homepage": "https://github.com/damarariefw-create/POS-UMKM#readme"
 }
