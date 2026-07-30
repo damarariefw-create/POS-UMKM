@@ -43,6 +43,7 @@ export const POSPage = () => {
 
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua');
@@ -56,7 +57,12 @@ export const POSPage = () => {
   // Payment method state ('cash', 'kasbon', or 'qris')
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [cashGiven, setCashGiven] = useState('');
+  const [paymentNotes, setPaymentNotes] = useState('');
+  
+  // Customer selection & instant add
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [isAddingCustomer, setIsAddingCustomer] = useState(false);
 
   // QRIS state — store merchant QRIS string in localStorage
   const [qrisString, setQrisString] = useState(
@@ -65,15 +71,16 @@ export const POSPage = () => {
   const [isEditingQris, setIsEditingQris] = useState(false);
   const [qrisTempInput, setQrisTempInput] = useState('');
 
-  // Fetch products and customers from Supabase for logged-in vendor
+  // Fetch products, customers, and categories from Supabase for logged-in vendor
   const fetchData = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
 
-      const [prodRes, custRes] = await Promise.all([
+      const [prodRes, custRes, catRes] = await Promise.all([
         supabase.from('products').select('*').eq('user_id', user.id).order('name', { ascending: true }),
         supabase.from('customers').select('*').eq('user_id', user.id).order('name', { ascending: true }),
+        supabase.from('categories').select('*').eq('user_id', user.id).order('name', { ascending: true }),
       ]);
 
       if (prodRes.error) throw prodRes.error;
@@ -81,6 +88,7 @@ export const POSPage = () => {
 
       setProducts(prodRes.data || []);
       setCustomers(custRes.data || []);
+      setCategoriesList(catRes.data || []);
     } catch (err) {
       console.error('Fetch data error:', err);
       setErrorMsg('Gagal memuat data produk dan pelanggan.');
@@ -95,8 +103,8 @@ export const POSPage = () => {
     }
   }, [user?.id]);
 
-  // Extract unique categories
-  const categories = ['Semua', ...Array.from(new Set(products.map((p) => p.type || p.category).filter(Boolean)))];
+  // Use categories from database, adding 'Semua' as first option
+  const categories = ['Semua', ...categoriesList.map((c) => c.name)];
 
   // Filter products based on search query and category
   const filteredProducts = products.filter((p) => {
@@ -107,16 +115,23 @@ export const POSPage = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Calculate Cash Change
+  // Calculate Cash Change or Deficit (Allow negative for 'Kurang/Kasbon' logic)
   const numericCash = parseFloat(cashGiven) || 0;
-  const changeAmount = paymentMethod === 'cash' ? Math.max(0, numericCash - total) : 0;
+  const isCashDeficit = paymentMethod === 'cash' && numericCash > 0 && numericCash < total;
+  const deficitAmount = isCashDeficit ? (total - numericCash) : 0;
+  const changeAmount = paymentMethod === 'cash' ? (numericCash - total) : 0;
 
   // Handle Pay transaction
   const handlePay = async () => {
     if (cartItems.length === 0) return;
 
-    if (paymentMethod === 'kasbon' && !selectedCustomerId) {
-      setErrorMsg('Pilih pelanggan terlebih dahulu untuk transaksi Kasbon.');
+    // Trigger Otomatis: If Kasbon OR Cash payment is less than total bill, require customer selection
+    if ((paymentMethod === 'kasbon' || isCashDeficit) && !selectedCustomerId) {
+      setErrorMsg(
+        isCashDeficit
+          ? `Uang dibayar kurang ${formatCurrency(deficitAmount)}. Pilih atau tambah nama pelanggan untuk menyimpan sisa kekurangan sebagai Kasbon.`
+          : 'Pilih atau tambah nama pelanggan terlebih dahulu untuk transaksi Kasbon.'
+      );
       return;
     }
 
@@ -126,15 +141,39 @@ export const POSPage = () => {
     try {
       const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);
 
-      // 1. Insert into sales table (primary schema table)
+      // Determine effective payment method and debt added
+      let effectiveMethod = paymentMethod;
+      let amountPaid = 0;
+      let debtAdded = 0;
+
+      if (paymentMethod === 'kasbon') {
+        effectiveMethod = 'kasbon';
+        amountPaid = 0;
+        debtAdded = total;
+      } else if (paymentMethod === 'qris') {
+        effectiveMethod = 'qris';
+        amountPaid = total;
+        debtAdded = 0;
+      } else if (paymentMethod === 'cash') {
+        if (isCashDeficit) {
+          effectiveMethod = 'kasbon'; // Partial cash converted to kasbon
+          amountPaid = numericCash;
+          debtAdded = deficitAmount;
+        } else {
+          effectiveMethod = 'cash';
+          amountPaid = numericCash || total;
+          debtAdded = 0;
+        }
+      }
+
+      // 1. Insert into sales table
       const salePayload = {
         user_id: user.id,
-        customer_id: paymentMethod === 'kasbon' ? selectedCustomerId : null,
+        customer_id: selectedCustomerId || null,
         total_amount: total,
-        payment_method: paymentMethod, // 'cash', 'kasbon', or 'qris'
-        amount_paid: paymentMethod === 'cash' ? (numericCash || total)
-          : paymentMethod === 'qris' ? total
-          : 0,
+        payment_method: effectiveMethod,
+        amount_paid: amountPaid,
+        payment_notes: paymentNotes.trim() || null,
         status: 'completed',
       };
 
@@ -151,7 +190,12 @@ export const POSPage = () => {
         // Fallback insert attempt into transactions table if schema alias exists
         const { data: transData, error: transError } = await supabase
           .from('transactions')
-          .insert([{ user_id: user.id, total_amount: total, customer_id: selectedCustomerId || null }])
+          .insert([{ 
+            user_id: user.id, 
+            total_amount: total, 
+            customer_id: selectedCustomerId || null,
+            payment_notes: paymentNotes.trim() || null
+          }])
           .select()
           .single();
 
@@ -177,7 +221,6 @@ export const POSPage = () => {
         .insert(saleItemsPayload);
 
       if (itemsError) {
-        // Try fallback transaction_items
         await supabase.from('transaction_items').insert(
           cartItems.map((item) => ({
             transaction_id: saleId,
@@ -190,9 +233,9 @@ export const POSPage = () => {
         ).catch(() => {});
       }
 
-      // 3. Update Customer Debt if Kasbon
-      if (paymentMethod === 'kasbon' && selectedCustomer) {
-        const newDebt = (Number(selectedCustomer.total_debt) || 0) + total;
+      // 3. Update Customer Debt if Kasbon or Deficit
+      if (debtAdded > 0 && selectedCustomer) {
+        const newDebt = (Number(selectedCustomer.total_debt) || 0) + debtAdded;
         await supabase
           .from('customers')
           .update({ total_debt: newDebt })
@@ -205,17 +248,21 @@ export const POSPage = () => {
         date: new Date(saleCreatedAt || Date.now()).toLocaleString('id-ID'),
         total: total,
         items: [...cartItems],
-        paymentMethod: paymentMethod,
+        paymentMethod: effectiveMethod,
         customerName: selectedCustomer ? selectedCustomer.name : null,
         cashGiven: numericCash,
         changeAmount: changeAmount,
+        debtAdded: debtAdded,
+        paymentNotes: paymentNotes.trim(),
       });
 
       clearCart();
       setCashGiven('');
+      setPaymentNotes('');
       setSelectedCustomerId('');
+      setCustomerSearch('');
       setIsMobileCartOpen(false);
-      fetchData(); // Refresh customers debt
+      fetchData(); // Refresh customer data & debt
     } catch (err) {
       console.error('Payment error:', err);
       setErrorMsg('Gagal memproses transaksi: ' + (err.message || 'Error server'));
@@ -241,6 +288,31 @@ export const POSPage = () => {
     if (c.includes('buah') || n.includes('pisang') || n.includes('jeruk')) return '🍎';
     if (c.includes('lauk') || n.includes('ayam') || n.includes('ikan')) return '🍗';
     return '🥬';
+  };
+
+  const handleAddInstantCustomer = async () => {
+    if (!customerSearch.trim()) return;
+    setIsAddingCustomer(true);
+    setErrorMsg('');
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .insert([{ user_id: user.id, name: customerSearch.trim(), total_debt: 0 }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      const newCustomer = data;
+      setCustomers((prev) => [...prev, newCustomer].sort((a, b) => a.name.localeCompare(b.name)));
+      setSelectedCustomerId(newCustomer.id);
+      setCustomerSearch('');
+    } catch (err) {
+      console.error('Instant add customer error:', err);
+      setErrorMsg('Gagal menambahkan pelanggan baru.');
+    } finally {
+      setIsAddingCustomer(false);
+    }
   };
 
   const formatCurrency = (val) => {
@@ -403,7 +475,6 @@ export const POSPage = () => {
               />
             </div>
 
-            {/* Cash Presets */}
             <div className="flex flex-wrap gap-1">
               {[total, 5000, 10000, 20000, 50000, 100000].map((preset, idx) => (
                 <button
@@ -416,13 +487,15 @@ export const POSPage = () => {
                 </button>
               ))}
             </div>
-
-            {/* Change Result */}
             {numericCash > 0 && (
               <div className="flex justify-between items-center text-xs font-bold pt-1 border-t border-border-custom/60">
-                <span className="text-text-secondary">Kembalian:</span>
-                <span className="text-emerald-700 text-sm tabular-nums">
-                  {formatCurrency(changeAmount)}
+                <span className="text-text-secondary">
+                  {numericCash < total ? 'Kurang (Otomatis Kasbon):' : 'Kembalian:'}
+                </span>
+                <span className={`text-sm tabular-nums ${numericCash < total ? 'text-amber-600 font-extrabold' : 'text-emerald-700'}`}>
+                  {numericCash < total 
+                    ? `-Rp ${deficitAmount.toLocaleString('id-ID')}`
+                    : formatCurrency(changeAmount)}
                 </span>
               </div>
             )}
@@ -550,32 +623,98 @@ export const POSPage = () => {
           </div>
         )}
 
-        {/* KASBON CUSTOMER DROPDOWN */}
-        {paymentMethod === 'kasbon' && (
-          <div className="space-y-1.5 bg-amber-50 p-2.5 rounded-md border border-amber-200">
-            <label className="block text-xs font-bold text-amber-900">
-              Pilih Pelanggan Kasbon *
-            </label>
-            <select
-              value={selectedCustomerId}
-              onChange={(e) => setSelectedCustomerId(e.target.value)}
-              className="w-full px-2 py-1.5 bg-white border border-amber-300 rounded text-xs font-semibold text-text-primary focus:outline-none focus:border-amber-600"
-            >
-              <option value="">-- Pilih Nama Pelanggan --</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} {c.total_debt > 0 ? `(Hutang: ${formatCurrency(c.total_debt)})` : ''}
-                </option>
-              ))}
-            </select>
+        {/* KASBON / DEFICIT CUSTOMER SELECTION WITH INSTANT ADD */}
+        {(paymentMethod === 'kasbon' || isCashDeficit) && (
+          <div className="space-y-2 bg-amber-50 p-2.5 rounded-md border border-amber-200">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold text-amber-900">
+                Pilih / Tambah Pelanggan {isCashDeficit ? '(Catat Sisa Kasbon) *' : '*'}
+              </label>
+              {selectedCustomerId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCustomerId('');
+                    setCustomerSearch('');
+                  }}
+                  className="text-[10px] text-amber-700 underline font-semibold hover:text-amber-900"
+                >
+                  Reset Pilih
+                </button>
+              )}
+            </div>
 
-            {customers.length === 0 && (
+            {/* Customer Search & Dropdown */}
+            <div className="space-y-1.5">
+              <input
+                type="text"
+                value={customerSearch}
+                onChange={(e) => setCustomerSearch(e.target.value)}
+                placeholder="Cari atau ketik nama pelanggan baru..."
+                className="w-full px-2.5 py-1.5 bg-white border border-amber-300 rounded text-xs font-medium text-text-primary focus:outline-none focus:border-amber-600"
+              />
+
+              {/* Instant Add Button if typed name does not exist */}
+              {customerSearch.trim() && !customers.some((c) => c.name.toLowerCase() === customerSearch.trim().toLowerCase()) && (
+                <button
+                  type="button"
+                  onClick={() => handleAddInstantCustomer(customerSearch.trim())}
+                  disabled={isAddingCustomer}
+                  className="w-full py-1.5 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  {isAddingCustomer ? (
+                    <span>Menambahkan...</span>
+                  ) : (
+                    <>
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Tambah &quot;{customerSearch.trim()}&quot; sebagai pelanggan baru</span>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {/* Select dropdown */}
+              <select
+                value={selectedCustomerId}
+                onChange={(e) => {
+                  setSelectedCustomerId(e.target.value);
+                  const found = customers.find((c) => c.id === e.target.value);
+                  if (found) setCustomerSearch(found.name);
+                }}
+                className="w-full px-2 py-1.5 bg-white border border-amber-300 rounded text-xs font-semibold text-text-primary focus:outline-none focus:border-amber-600"
+              >
+                <option value="">-- Pilih Nama Pelanggan --</option>
+                {customers
+                  .filter((c) => c.name.toLowerCase().includes(customerSearch.toLowerCase()))
+                  .map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} {c.total_debt > 0 ? `(Hutang: ${formatCurrency(c.total_debt)})` : ''}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            {customers.length === 0 && !customerSearch.trim() && (
               <p className="text-[11px] text-amber-800">
-                Belum ada data pelanggan. Tambahkan dulu di menu Pelanggan.
+                Belum ada data pelanggan. Ketik nama pelanggan di kolom pencarian di atas untuk menambahkan instan.
               </p>
             )}
           </div>
         )}
+
+        {/* CATATAN PEMBAYARAN */}
+        <div className="space-y-1">
+          <label className="block text-[11px] font-semibold uppercase text-text-secondary">
+            Catatan Pembayaran / Transaksi (Opsional)
+          </label>
+          <input
+            type="text"
+            value={paymentNotes}
+            onChange={(e) => setPaymentNotes(e.target.value)}
+            placeholder="cth: Bayar separuh dulu, titip di warung..."
+            className="w-full px-2.5 py-1.5 bg-background border border-border-custom rounded-md text-xs text-text-primary focus:outline-none focus:border-primary"
+          />
+        </div>
 
         {/* Total Summary */}
         <div className="space-y-1 text-xs text-text-secondary pt-1">
@@ -857,7 +996,7 @@ export const POSPage = () => {
                   : 'bg-background border-border-custom text-text-primary'
               }`}>
                 {successModal.paymentMethod === 'kasbon'
-                  ? `KASBON (${successModal.customerName})`
+                  ? `KASBON (${successModal.customerName || 'Pelanggan'})`
                   : successModal.paymentMethod === 'qris'
                   ? '✅ QRIS / Transfer'
                   : 'TUNAI / CASH'}
@@ -882,17 +1021,29 @@ export const POSPage = () => {
                 <span>Total Belanja</span>
                 <span className="text-primary tabular-nums">{formatCurrency(successModal.total)}</span>
               </div>
-              {successModal.paymentMethod === 'cash' && successModal.cashGiven > 0 && (
-                <>
-                  <div className="flex justify-between text-text-secondary">
-                    <span>Uang Diterima</span>
-                    <span className="tabular-nums">{formatCurrency(successModal.cashGiven)}</span>
-                  </div>
-                  <div className="flex justify-between text-emerald-700 font-bold">
-                    <span>Kembalian</span>
-                    <span className="tabular-nums">{formatCurrency(successModal.changeAmount)}</span>
-                  </div>
-                </>
+              {successModal.cashGiven > 0 && (
+                <div className="flex justify-between text-text-secondary">
+                  <span>Uang Diterima</span>
+                  <span className="tabular-nums">{formatCurrency(successModal.cashGiven)}</span>
+                </div>
+              )}
+              {successModal.debtAdded > 0 ? (
+                <div className="flex justify-between text-amber-700 font-bold bg-amber-50 p-1.5 rounded border border-amber-200">
+                  <span>Kasbon ({successModal.customerName}):</span>
+                  <span className="tabular-nums">+{formatCurrency(successModal.debtAdded)}</span>
+                </div>
+              ) : successModal.changeAmount > 0 ? (
+                <div className="flex justify-between text-emerald-700 font-bold">
+                  <span>Kembalian</span>
+                  <span className="tabular-nums">{formatCurrency(successModal.changeAmount)}</span>
+                </div>
+              ) : null}
+
+              {successModal.paymentNotes && (
+                <div className="mt-2 pt-1.5 border-t border-border-custom/50 text-[11px] text-text-secondary italic">
+                  <span className="font-semibold not-italic text-text-primary">Catatan: </span>
+                  {successModal.paymentNotes}
+                </div>
               )}
             </div>
 

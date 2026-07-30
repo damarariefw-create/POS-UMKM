@@ -6,19 +6,25 @@ import { Package, Plus, Trash2, Tag, DollarSign, Image as ImageIcon, AlertCircle
 export const ProductsPage = () => {
   const { user, ensureProfileExists } = useAuth();
 
-  const [activeTab, setActiveTab] = useState('list'); // 'list' or 'mass_update'
+  const [activeTab, setActiveTab] = useState('list'); // 'list', 'mass_update', or 'categories'
   const [products, setProducts] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Form State
+  // Form State (Product)
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('Sayur Hijau');
+  const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [imageDataUrl, setImageDataUrl] = useState('');
   const [imageFileName, setImageFileName] = useState('');
+
+  // Form State (Category)
+  const [newCatName, setNewCatName] = useState('');
+  const [editingCatId, setEditingCatId] = useState(null);
+  const [editingCatName, setEditingCatName] = useState('');
 
   // Local Image Storage Map (productId -> dataUrl)
   const [localImages, setLocalImages] = useState({});
@@ -26,22 +32,42 @@ export const ProductsPage = () => {
   // Mass Update State: Map of productId -> price
   const [massPrices, setMassPrices] = useState({});
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      
+      const [prodRes, catRes] = await Promise.all([
+        supabase
+          .from('products')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('categories')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('name', { ascending: true })
+      ]);
 
-      if (error) throw error;
-      setProducts(data || []);
+      if (prodRes.error) throw prodRes.error;
+      if (catRes.error) {
+        console.warn('Categories table might not exist yet:', catRes.error.message);
+      }
+      
+      const prods = prodRes.data || [];
+      const cats = catRes.data || [];
+      
+      setProducts(prods);
+      setCategoriesList(cats);
+      
+      if (cats.length > 0 && !category) {
+        setCategory(cats[0].name);
+      }
 
       // Load local images from localStorage if any
       const imgMap = {};
-      (data || []).forEach((p) => {
+      prods.forEach((p) => {
         const savedImg = localStorage.getItem(`pos_umkm_img_${p.id}`) || localStorage.getItem(`sayurku_img_${p.id}`);
         if (savedImg) imgMap[p.id] = savedImg;
       });
@@ -49,13 +75,13 @@ export const ProductsPage = () => {
 
       // Populate massPrices map
       const priceMap = {};
-      (data || []).forEach((p) => {
+      prods.forEach((p) => {
         priceMap[p.id] = p.price;
       });
       setMassPrices(priceMap);
     } catch (err) {
-      console.error('Fetch products error:', err);
-      setErrorMsg('Gagal memuat produk dari database.');
+      console.error('Fetch data error:', err);
+      setErrorMsg('Gagal memuat data dari database.');
     } finally {
       setLoading(false);
     }
@@ -63,7 +89,7 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetchProducts();
+      fetchData();
     }
   }, [user?.id]);
 
@@ -201,10 +227,76 @@ export const ProductsPage = () => {
 
       await Promise.all(updatePromises);
       setSuccessMsg('Semua harga produk berhasil diperbarui di database!');
-      fetchProducts();
+      fetchData();
     } catch (err) {
       console.error('Mass price update error:', err);
       setErrorMsg('Gagal memperbarui harga massal.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Category CRUD
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    if (!newCatName.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('categories')
+        .insert([{ user_id: user.id, name: newCatName.trim() }]);
+
+      if (error) throw error;
+      setSuccessMsg(`Kategori "${newCatName}" berhasil ditambahkan.`);
+      setNewCatName('');
+      fetchData();
+    } catch (err) {
+      console.error('Add category error:', err);
+      setErrorMsg('Gagal menambahkan kategori. Pastikan tabel "categories" sudah ada.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteCategory = async (catId, catName) => {
+    if (!window.confirm(`Hapus kategori "${catName}"?`)) return;
+
+    try {
+      const { error } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', catId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      setSuccessMsg(`Kategori "${catName}" berhasil dihapus.`);
+      fetchData();
+    } catch (err) {
+      console.error('Delete category error:', err);
+      setErrorMsg('Gagal menghapus kategori.');
+    }
+  };
+
+  const handleSaveEditCategory = async (catId) => {
+    if (!editingCatName.trim()) return;
+    setIsSubmitting(true);
+    setErrorMsg('');
+    try {
+      const { error } = await supabase
+        .from('categories')
+        .update({ name: editingCatName.trim() })
+        .eq('id', catId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      setSuccessMsg(`Kategori berhasil diperbarui menjadi "${editingCatName.trim()}".`);
+      setEditingCatId(null);
+      setEditingCatName('');
+      fetchData();
+    } catch (err) {
+      console.error('Edit category error:', err);
+      setErrorMsg('Gagal memperbarui kategori.');
     } finally {
       setIsSubmitting(false);
     }
@@ -256,6 +348,17 @@ export const ProductsPage = () => {
           >
             <Edit3 className="w-4 h-4" />
             <span>Daily Mass Update</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('categories')}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'categories'
+                ? 'bg-primary text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <Tag className="w-4 h-4" />
+            <span>Kelola Kategori</span>
           </button>
         </div>
       </div>
@@ -311,13 +414,19 @@ export const ProductsPage = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full px-3 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
                 >
-                  <option value="Sayur Hijau">Sayur Hijau</option>
-                  <option value="Paket Sayur">Paket Sayur</option>
-                  <option value="Bumbu Dapur">Bumbu Dapur</option>
-                  <option value="Lauk Pauk">Lauk Pauk</option>
-                  <option value="Buah Segar">Buah Segar</option>
+                  <option value="">-- Pilih Kategori --</option>
+                  {categoriesList.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
                   <option value="Lainnya">Lainnya</option>
                 </select>
+                {categoriesList.length === 0 && (
+                  <p className="text-[10px] text-amber-600 mt-1">
+                    Belum ada kategori. Tambah di tab <strong>Kelola Kategori</strong>.
+                  </p>
+                )}
               </div>
 
               {/* Price */}
@@ -539,6 +648,102 @@ export const ProductsPage = () => {
               </div>
             </>
           )}
+        </div>
+      )}
+
+      {/* TAB 3: CATEGORIES MANAGEMENT */}
+      {activeTab === 'categories' && (
+        <div className="space-y-6">
+          <div className="bg-surface rounded-lg border border-border-custom p-5 shadow-sm">
+            <h2 className="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
+              <Plus className="w-4 h-4 text-primary" />
+              Tambah Kategori Baru
+            </h2>
+            <form onSubmit={handleAddCategory} className="flex gap-3">
+              <input
+                type="text"
+                value={newCatName}
+                onChange={(e) => setNewCatName(e.target.value)}
+                placeholder="cth: Sayur Daun / Umbi-umbian"
+                className="flex-1 px-3 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting || !newCatName.trim()}
+                className="h-10 px-6 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-lg shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Simpan</span>
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-surface rounded-lg border border-border-custom overflow-hidden shadow-sm">
+            <div className="p-4 border-b border-border-custom bg-surface">
+              <h2 className="font-bold text-base text-text-primary">Daftar Kategori ({categoriesList.length})</h2>
+            </div>
+            <div className="divide-y divide-border-custom">
+              {categoriesList.length === 0 ? (
+                <p className="p-8 text-center text-text-secondary text-sm">
+                  Belum ada kategori disetel. Tambahkan kategori baru pada form di atas.
+                </p>
+              ) : (
+                categoriesList.map((cat) => (
+                  <div key={cat.id} className="p-4 flex items-center justify-between hover:bg-background/50 transition-colors">
+                    {editingCatId === cat.id ? (
+                      <div className="flex items-center gap-2 flex-1 mr-3">
+                        <input
+                          type="text"
+                          value={editingCatName}
+                          onChange={(e) => setEditingCatName(e.target.value)}
+                          className="flex-1 px-3 py-1.5 bg-background border border-primary rounded-md text-sm font-semibold text-text-primary focus:outline-none"
+                        />
+                        <button
+                          onClick={() => handleSaveEditCategory(cat.id)}
+                          disabled={isSubmitting || !editingCatName.trim()}
+                          className="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-md hover:bg-primary-hover transition-colors"
+                        >
+                          Simpan
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingCatId(null);
+                            setEditingCatName('');
+                          }}
+                          className="px-3 py-1.5 bg-background border border-border-custom text-text-secondary text-xs font-semibold rounded-md hover:bg-border-custom/50 transition-colors"
+                        >
+                          Batal
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="font-semibold text-text-primary">{cat.name}</span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => {
+                              setEditingCatId(cat.id);
+                              setEditingCatName(cat.name);
+                            }}
+                            className="p-1.5 text-text-secondary hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
+                            title="Edit Kategori"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                            className="p-1.5 text-destructive hover:bg-destructive/10 rounded-md transition-colors"
+                            title="Hapus Kategori"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

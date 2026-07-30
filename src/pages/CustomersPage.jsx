@@ -15,7 +15,7 @@ export const CustomersPage = () => {
 
   // Form state
   const [name, setName] = useState('');
-  const [route, setRoute] = useState('');
+  const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
 
   const fetchCustomers = async () => {
@@ -68,6 +68,7 @@ export const CustomersPage = () => {
           {
             user_id: user.id,
             name: name.trim(),
+            address: address.trim() || null,
             phone: cleanPhone || null,
             total_debt: 0,
           },
@@ -78,7 +79,7 @@ export const CustomersPage = () => {
 
       setSuccessMsg(`Pelanggan "${name}" berhasil ditambahkan!`);
       setName('');
-      setRoute('');
+      setAddress('');
       setPhone('');
       fetchCustomers();
     } catch (err) {
@@ -175,14 +176,14 @@ export const CustomersPage = () => {
           {/* Route / Address */}
           <div>
             <label className="block text-xs font-semibold uppercase text-text-secondary mb-1">
-              Rute / Alamat (cth: Blok A)
+              Alamat (cth: Blok A / RT 03)
             </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
               <input
                 type="text"
-                value={route}
-                onChange={(e) => setRoute(e.target.value)}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 placeholder="cth: Blok A / RT 03"
                 className="w-full pl-9 pr-3 py-2 bg-background border border-border-custom rounded-md text-sm text-text-primary focus:outline-none focus:border-primary"
               />
@@ -260,6 +261,7 @@ export const CustomersPage = () => {
               <thead>
                 <tr className="bg-background border-b border-border-custom text-xs uppercase font-semibold text-text-secondary">
                   <th className="py-3 px-4">Nama Pelanggan</th>
+                  <th className="py-3 px-4">Alamat</th>
                   <th className="py-3 px-4">No. WhatsApp</th>
                   <th className="py-3 px-4 text-right">Total Kasbon (Hutang)</th>
                   <th className="py-3 px-4 text-center">Aksi / Chat WA</th>
@@ -270,6 +272,9 @@ export const CustomersPage = () => {
                   <tr key={customer.id} className="hover:bg-background/50 transition-colors">
                     <td className="py-3 px-4 font-semibold text-text-primary">
                       {customer.name}
+                    </td>
+                    <td className="py-3 px-4 text-xs text-text-secondary max-w-[160px] sm:max-w-[220px] truncate whitespace-nowrap overflow-hidden text-ellipsis" title={customer.address}>
+                      {customer.address || '-'}
                     </td>
                     <td className="py-3 px-4 text-xs text-text-secondary tabular-nums">
                       {customer.phone ? `+${customer.phone}` : '-'}

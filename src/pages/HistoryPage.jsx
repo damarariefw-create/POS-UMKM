@@ -290,6 +290,12 @@ export const HistoryPage = () => {
                         })
                       )}
                     </div>
+                    {sale.payment_notes && (
+                      <div className="p-2.5 bg-amber-50/60 border border-amber-200 rounded-md text-xs text-amber-900 mt-2">
+                        <span className="font-bold">Catatan Pembayaran: </span>
+                        <span>{sale.payment_notes}</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
