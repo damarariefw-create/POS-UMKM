@@ -217,7 +217,7 @@ export const ProductsPage = () => {
     try {
       const updatePromises = Object.entries(massPrices).map(([id, newPrice]) => {
         const num = parseFloat(newPrice);
-        if (isNaN(num)) return Promise.resolve();
+        if (isNaN(num) || num < 0) return Promise.resolve();
         return supabase
           .from('products')
           .update({ price: num })

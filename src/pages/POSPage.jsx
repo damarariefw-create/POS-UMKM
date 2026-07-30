@@ -117,7 +117,7 @@ export const POSPage = () => {
 
   // Calculate Cash Change or Deficit (Allow negative for 'Kurang/Kasbon' logic)
   const numericCash = parseFloat(cashGiven) || 0;
-  const isCashDeficit = paymentMethod === 'cash' && numericCash > 0 && numericCash < total;
+  const isCashDeficit = paymentMethod === 'cash' && numericCash < total;
   const deficitAmount = isCashDeficit ? (total - numericCash) : 0;
   const changeAmount = paymentMethod === 'cash' ? (numericCash - total) : 0;
 
